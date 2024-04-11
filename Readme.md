@@ -1,11 +1,11 @@
-## Class Diagram
-![Class Diagram](Images/Class%20Diagram.svg)
+## Use Case
+![Use Case](Images/Use%20Case.svg)
 ---
 ## Domain Model
 ![Domain Model](Images/Domain%20Model.svg)
 ---
-## Use Case
-![Use Case](Images/Use%20Case.svg)
+## Class Diagram
+![Class Diagram](Images/Class%20Diagram.svg)
 ---
 ## Robustness
 ![Robustness](Images/Robustness.svg)
