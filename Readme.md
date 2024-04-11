@@ -1,11 +1,14 @@
 ## Class Diagram
-![Class Diagram](Images/Class%20Diagram.png)
+![Class Diagram](Images/Class%20Diagram.svg)
 ---
 ## Domain Model
-![Domain Model](Images/Domain%20Model.png)
+![Domain Model](Images/Domain%20Model.svg)
 ---
 ## Use Case
-![Use Case](Images/Use%20Case.png)
+![Use Case](Images/Use%20Case.svg)
+---
+## Robustness
+![Robustness](Images/Robustness.svg)
 ---
 
 ## DeskBooking Sequence
