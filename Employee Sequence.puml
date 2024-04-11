@@ -1,0 +1,128 @@
+@startuml
+!define SUCCESS #5cb85c
+!define ERROR #d9534f
+!define REQUEST #337ab7
+
+actor User
+participant "EmployeeController" as Controller
+participant "EmployeeService" as Service
+participant "EmployeeRepository" as Repository
+
+
+User -> Controller: GET /employees
+activate Controller
+Controller -> Service: getAllEmployees()
+activate Service
+Service -> Repository: getAllEmployees()
+activate Repository
+Repository --> Service: Iterable<Employee>
+deactivate Repository
+Service --> Controller: Iterable<Employee>
+deactivate Service
+Controller --> User: ResponseEntity with Employees (200 OK)
+deactivate Controller
+
+User -> Controller: GET /employees/id/{employeeId}
+activate Controller
+Controller -> Service: getEmployeeById(employeeId)
+activate Service
+Service -> Repository: getEmployeeById(employeeId)
+activate Repository
+Repository --> Service: Optional<Employee>
+deactivate Repository
+Service --> Controller: Optional<Employee>
+deactivate Service
+alt #lightgreen Employee Found
+    Controller --> User: ResponseEntity with Employee (200 OK)
+else #lightpink Employee Not Found
+    Controller --> User: ResponseEntity with Error (404 Not Found)
+end
+deactivate Controller
+
+User -> Controller: GET /employees/name/{employeeName}
+activate Controller
+Controller -> Service: getEmployeeByName(employeeName)
+activate Service
+Service -> Repository: getEmployeeByName(employeeName)
+activate Repository
+Repository --> Service: List<Employee>
+deactivate Repository
+Service --> Controller: List<Employee>
+deactivate Service
+alt #lightgreen Employees Found
+    Controller --> User: ResponseEntity with Employees (200 OK)
+else #lightpink No Employees Found
+    Controller --> User: ResponseEntity with Error (404 Not Found)
+end
+deactivate Controller
+
+User -> Controller: GET /employees/reportingTo/{employeeId}
+activate Controller
+Controller -> Service: getEmployeeReportsToByEmployeeId(employeeId)
+activate Service
+Service -> Repository: getEmployeeReportsToByEmployeeId(employeeId)
+activate Repository
+Repository --> Service: Employee
+deactivate Repository
+Service --> Controller: Employee
+deactivate Service
+alt #lightgreen Employee Found
+    Controller --> User: ResponseEntity with Employee (200 OK)
+else #lightpink Employee Not Found
+    Controller --> User: ResponseEntity with Error (404 Not Found)
+end
+deactivate Controller
+
+User -> Controller: POST /employees
+activate Controller
+Controller -> Service: addEmployee(employee)
+activate Service
+Service -> Repository: addEmployee(employee)
+activate Repository
+Repository --> Service: Boolean
+deactivate Repository
+Service --> Controller: Boolean
+deactivate Service
+alt #lightgreen Employee Added
+    Controller --> User: ResponseEntity with Success Message (201 Created)
+else #lightpink Failed to Add Employee
+    Controller --> User: ResponseEntity with Error (500 Internal Server Error)
+end
+deactivate Controller
+
+
+
+User -> Controller: PUT /employees
+activate Controller
+Controller -> Service: updateEmployee(employee)
+activate Service
+Service -> Repository: updateEmployee(employee)
+activate Repository
+Repository --> Service: Boolean
+deactivate Repository
+Service --> Controller: Boolean
+deactivate Service
+alt #lightgreen Employee Updated
+    Controller --> User: ResponseEntity with Success Message (200 OK)
+else #lightpink Failed to Update Employee
+    Controller --> User: ResponseEntity with Error (500 Internal Server Error)
+end
+deactivate Controller
+
+User -> Controller: DELETE /employees/id/{employeeId}
+activate Controller
+Controller -> Service: deleteEmployee(employeeId)
+activate Service
+Service -> Repository: deleteEmployee(employeeId)
+activate Repository
+Repository --> Service: Boolean
+deactivate Repository
+Service --> Controller: Boolean
+deactivate Service
+alt #lightgreen Employee Deleted
+    Controller --> User: ResponseEntity with Success Message (200 OK)
+else #lightpink Failed to Delete Employee
+    Controller --> User: ResponseEntity with Error (500 Internal Server Error)
+end
+deactivate Controller
+@enduml

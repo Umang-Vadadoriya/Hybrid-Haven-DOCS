@@ -1,0 +1,103 @@
+@startuml
+!define SUCCESS #5cb85c
+!define ERROR #d9534f
+!define REQUEST #337ab7
+
+actor User
+participant "EventsController" as Controller
+participant "EventsService" as Service
+participant "EventsRepository" as Repository
+
+User -> Controller: GET /events
+activate Controller
+Controller -> Service: getAllEvents()
+activate Service
+Service -> Repository: getAllEvents()
+activate Repository
+Repository --> Service: List<Events>
+deactivate Repository
+Service --> Controller: List<Events>
+deactivate Service
+Controller --> User: ResponseEntity with Events (200 OK)
+alt SUCCESS Event Found
+    Controller --> User: ResponseEntity with Event Entity (200 OK)
+else ERROR Event Not Found
+    Controller --> User: ResponseEntity with Error (404 Not Found)
+end
+deactivate Controller
+
+User -> Controller: GET /events/{eventId}
+activate Controller
+Controller -> Service: getEventById(eventId)
+activate Service
+Service -> Repository: getEventById(eventId)
+activate Repository
+Repository --> Service: Optional<Events>
+deactivate Repository
+Service --> Controller: Optional<Events>
+deactivate Service
+alt SUCCESS Event Found
+    Controller --> User: ResponseEntity with Event Entity (200 OK)
+else ERROR Event Not Found
+    Controller --> User: ResponseEntity with Error (404 Not Found)
+end
+deactivate Controller
+
+
+User -> Controller: GET /events/eventname/{eventName}
+activate Controller
+Controller -> Service: getEventByName(eventName)
+activate Service
+Service -> Repository: getEventByName(eventName)
+activate Repository
+Repository --> Service: Optional<Events>
+deactivate Repository
+Service --> Controller: Optional<Events>
+deactivate Service
+alt SUCCESS Event Found
+    Controller --> User: ResponseEntity with Event Entity (200 OK)
+else ERROR Event Not Found
+    Controller --> User: ResponseEntity with Error (404 Not Found)
+end
+deactivate Controller
+
+
+User -> Controller: DELETE /events/id/{id}
+activate Controller
+Controller -> Service: deleteEvent(id)
+activate Service
+Service -> Repository: deleteEvent(id)
+activate Repository
+Repository --> Service: void
+deactivate Repository
+Service --> Controller: void
+deactivate Service
+Controller --> User: ResponseEntity with No Content (200 OK)
+deactivate Controller
+
+User -> Controller: POST /events
+activate Controller
+Controller -> Service: createEvent(event)
+activate Service
+Service -> Repository: saveEvent(event)
+activate Repository
+Repository --> Service: savedEvent
+deactivate Repository
+Service --> Controller: savedEvent
+deactivate Service
+Controller --> User: ResponseEntity with Created Event (201 Created)
+deactivate Controller
+
+User -> Controller: PUT /events/id/{id}
+activate Controller
+Controller -> Service: updateEvent(id, event)
+activate Service
+Service -> Repository: saveEvent(event)
+activate Repository
+Repository --> Service: updatedEvent
+deactivate Repository
+Service --> Controller: updatedEvent
+deactivate Service
+Controller --> User: ResponseEntity with Updated Event (200 OK)
+deactivate Controller
+@enduml

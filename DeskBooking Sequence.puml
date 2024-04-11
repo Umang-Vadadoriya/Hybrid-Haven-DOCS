@@ -1,0 +1,66 @@
+@startuml
+!define SUCCESS #5cb85c
+!define ERROR #d9534f
+!define REQUEST #337ab7
+
+actor User
+participant "DeskBookingController" as Controller
+participant "DeskBookingService" as Service
+participant "DeskBookingRepository" as Repository
+
+User -> Controller: POST /desk-bookings
+activate Controller
+Controller -> Service: createDeskBooking(deskBooking)
+activate Service
+Service -> Repository: saveDeskBooking(deskBooking)
+activate Repository
+Repository --> Service: savedDeskBooking
+deactivate Repository
+Service --> Controller: savedDeskBooking
+deactivate Service
+Controller --> User: ResponseEntity with DeskBooking (201 Created)
+deactivate Controller
+
+User -> Controller: GET /desk-bookings/id/{id}
+activate Controller
+Controller -> Service: getDeskBookingById(id)
+activate Service
+Service -> Repository: getDeskBookingById(id)
+activate Repository
+Repository --> Service: deskBooking
+deactivate Repository
+Service --> Controller: deskBooking
+deactivate Service
+alt SUCCESS DeskBooking Found
+    Controller --> User: ResponseEntity with DeskBooking (200 OK)
+else ERROR DeskBooking Not Found
+    Controller --> User: ResponseEntity with Error (404 Not Found)
+end
+deactivate Controller
+
+User -> Controller: GET /desk-bookings
+activate Controller
+Controller -> Service: getAllDeskBookings()
+activate Service
+Service -> Repository: getAllDeskBookings()
+activate Repository
+Repository --> Service: deskBookingList
+deactivate Repository
+Service --> Controller: deskBookingList
+deactivate Service
+Controller --> User: ResponseEntity with DeskBooking List (200 OK)
+deactivate Controller
+
+User -> Controller: DELETE /desk-bookings/id/{id}
+activate Controller
+Controller -> Service: deleteDeskBooking(id)
+activate Service
+Service -> Repository: deleteDeskBooking(id)
+activate Repository
+Repository --> Service: void
+deactivate Repository
+Service --> Controller: void
+deactivate Service
+Controller --> User: ResponseEntity with No Content (204 No Content)
+deactivate Controller
+@enduml
